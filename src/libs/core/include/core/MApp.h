@@ -2,6 +2,9 @@
 #define MASON_MAPP_H
 
 #include <string>
+#include <filesystem>
+
+#include "nlohmann/json.hpp"
 
 #define mApp mason::MApp::instance()
 
@@ -9,32 +12,46 @@ namespace mason {
 
 class MApp {
 public:
-    static MApp *instance();
+    static MApp &instance(int argc = 0, char **argv = nullptr, std::string app_name = "");
 
-    static std::string app_name();
+    std::string app_name();
 
-    static std::string data_dir();
+    std::filesystem::path data_dir();
 
-    static std::string local_data_dir();
+    std::filesystem::path log_dir();
 
-    static std::string temp_dir();
+    std::filesystem::path tmp_dir();
 
-    static std::string config_path();
+    std::filesystem::path sub_data_dir();
 
-    static std::string default_config_path();
+    std::filesystem::path user_dir();
+
+    nlohmann::json get_config();
 
 public:
     MApp(int argc, char **argv, std::string app_name);
 
 private:
-    void init_data_dirs(int argc, char **argv);
+    void parse_args(int argc, char **argv);
+    std::filesystem::path find_config_in_working_dir();
+    void load_config();
+    std::string get_platform_data_dir();
+    bool is_data_dir_valid();
+    void init_data_dirs();
+
 
 private:
     static MApp *s_mApp;
-    static std::string s_app_name;
-    static std::string s_data_dir;
-    static std::string s_local_data_dir;
-    static std::string s_temp_dir;
+
+    std::string m_app_name = "";
+    nlohmann::json m_config;
+    std::filesystem::path m_config_path = "";
+
+    std::filesystem::path m_data_dir = "";
+    std::filesystem::path m_log_dir = "";
+    std::filesystem::path m_tmp_dir = "";
+    std::filesystem::path m_sub_data_dir = "";
+    std::filesystem::path m_user_dir = "";
 };
 
 }
