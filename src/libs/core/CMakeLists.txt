@@ -18,11 +18,23 @@ enable_testing()
 
 find_package(GTest CONFIG REQUIRED)
 
-add_executable(${PROJECT_NAME}_test
-	test/main.cpp
+add_executable(${PROJECT_NAME}_NoPresetCfgTest
+	test/MAppNoPresetCfgTest.cpp
 )
 
-target_link_libraries(${PROJECT_NAME}_test PRIVATE
+target_link_libraries(${PROJECT_NAME}_NoPresetCfgTest PRIVATE
+	GTest::gtest
+	GTest::gtest_main
+	GTest::gmock
+	GTest::gmock_main
+	${PROJECT_NAME}
+)
+
+add_executable(${PROJECT_NAME}_PresetCfgInArgsTest
+	test/MAppPresetCfgInArgsTest.cpp
+)
+
+target_link_libraries(${PROJECT_NAME}_PresetCfgInArgsTest PRIVATE
 	GTest::gtest
 	GTest::gtest_main
 	GTest::gmock
@@ -31,7 +43,12 @@ target_link_libraries(${PROJECT_NAME}_test PRIVATE
 )
 
 add_test(
-	NAME ${RPOJECT_NAME}_test
-	COMMAND ${RPOJECT_NAME}_test
+		NAME ${PROJECT_NAME}_PresetCfgInArgsTest
+		COMMAND ${PROJECT_NAME}_PresetCfgInArgsTest
 )
+
+set_tests_properties(${PROJECT_NAME}_PresetCfgInArgsTest PROPERTIES
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test/MAppPresetCfgInArgsTestWD
+)
+
 
