@@ -1,6 +1,7 @@
 #include "core/MApp.h"
 
 #include <stdexcept>
+#include <iostream>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -74,7 +75,6 @@ namespace mason {
 
     void MApp::parse_args(int argc, char **argv) {
         CLI::App cli_parser(m_app_name);
-
         cli_parser.add_option("-c,--config", m_config_path, "Config file path");
 
         try {
@@ -176,8 +176,8 @@ namespace mason {
     }
 
     void MApp::init_data_dirs() {
-        if (!m_config_path.empty() && m_config.contains("data_dir")) {
-            m_data_dir = m_config["data_dir"].get<std::string>();
+        if (!m_config_path.empty() && m_config.contains("app") && m_config["app"].contains("data_dir")) {
+            m_data_dir = m_config["app"]["data_dir"].get<std::string>();
         } else {
             m_data_dir = get_platform_data_dir();
         }

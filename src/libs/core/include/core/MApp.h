@@ -28,7 +28,7 @@ public:
 
     nlohmann::json get_config();
 
-public:
+private:
     MApp(int argc, char **argv, std::string app_name);
 
 private:

@@ -1,0 +1,5 @@
+{
+  "app": {
+    "data_dir": "./custom_data"
+  }
+}

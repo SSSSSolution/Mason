@@ -8,16 +8,6 @@
 #include <gtest/gtest.h>
 #include <core/MApp.h>
 
-static std::filesystem::path get_platform_local_app_data_dir(const std::string &app_name) {
-#ifdef _WIN32
-    char path[MAX_PATH];
-    if (SUCCEEDED(SHGetFolderPathA(nullptr, CSIDL_LOCAL_APPDATA, nullptr, 0, path))) {
-        return std::string(path) + "\\" + app_name;
-    }
-    return "";
-#endif
-}
-
 class MAppTest : public ::testing::Test {
 protected:
     void SetUp() override {
@@ -30,7 +20,7 @@ protected:
     }
 
     std::string expected_app_name = "test";
-    std::filesystem::path expected_data_dir = get_platform_local_app_data_dir(expected_app_name);
+    std::filesystem::path expected_data_dir = "./custom_data";
 };
 
 TEST_F(MAppTest, TestAppName) {
