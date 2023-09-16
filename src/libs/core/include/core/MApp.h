@@ -4,7 +4,7 @@
 #include <string>
 #include <filesystem>
 
-#include "nlohmann/json.hpp"
+#include "core/nlohmann/json.hpp"
 
 #define mApp mason::MApp::instance()
 
