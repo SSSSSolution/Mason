@@ -24,27 +24,27 @@ protected:
 };
 
 TEST_F(MAppTest, TestAppName) {
-    EXPECT_EQ(mason::MApp::instance().app_name(), expected_app_name);
+    EXPECT_EQ(mason::MApp::instance().get_app_name(), expected_app_name);
 }
 
 TEST_F(MAppTest, TestDataDir) {
-    EXPECT_EQ(mason::MApp::instance().data_dir(), expected_data_dir);
+    EXPECT_EQ(mason::MApp::instance().get_data_dir(), expected_data_dir);
 }
 
 TEST_F(MAppTest, TestLogDir) {
-    EXPECT_EQ(mason::MApp::instance().log_dir(), expected_data_dir / "log");
+    EXPECT_EQ(mason::MApp::instance().get_log_dir(), expected_data_dir / "log");
 }
 
 TEST_F(MAppTest, TestTmpDir) {
-    EXPECT_EQ(mason::MApp::instance().tmp_dir(), expected_data_dir / "tmp");
+    EXPECT_EQ(mason::MApp::instance().get_tmp_dir(), expected_data_dir / "tmp");
 }
 
 TEST_F(MAppTest, TestSubDataDir) {
-    EXPECT_EQ(mason::MApp::instance().sub_data_dir(), expected_data_dir / "data");
+    EXPECT_EQ(mason::MApp::instance().get_sub_data_dir(), expected_data_dir / "data");
 }
 
 TEST_F(MAppTest, TestUserDir) {
-    EXPECT_EQ(mason::MApp::instance().user_dir(), expected_data_dir / "user");
+    EXPECT_EQ(mason::MApp::instance().get_user_dir(), expected_data_dir / "user");
 }
 
 int main(int argc, char **argv) {

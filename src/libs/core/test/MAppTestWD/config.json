@@ -1,5 +1,11 @@
 {
   "app": {
-    "data_dir": "./custom_data"
+    "data_dir": "./custom_data",
+    "module_log_levels": [
+      {
+        "module": "",
+        "level": "trace"
+      }
+    ]
   }
 }

@@ -17,27 +17,27 @@ namespace mason {
         return sMApp;
     }
 
-    std::string MApp::app_name() {
+    std::string MApp::get_app_name() {
         return m_app_name;
     }
 
-    std::filesystem::path MApp::data_dir() {
+    std::filesystem::path MApp::get_data_dir() {
         return m_data_dir;
     }
 
-    std::filesystem::path MApp::log_dir() {
+    std::filesystem::path MApp::get_log_dir() {
         return m_log_dir;
     }
 
-    std::filesystem::path MApp::tmp_dir() {
+    std::filesystem::path MApp::get_tmp_dir() {
         return m_tmp_dir;
     }
 
-    std::filesystem::path MApp::sub_data_dir() {
+    std::filesystem::path MApp::get_sub_data_dir() {
         return m_sub_data_dir;
     }
 
-    std::filesystem::path MApp::user_dir() {
+    std::filesystem::path MApp::get_user_dir() {
         return m_user_dir;
     }
 
@@ -61,16 +61,19 @@ namespace mason {
 
         init_data_dirs();
 
-        if (!is_data_dir_valid()) {
+        if (!is_data_directory_valid()) {
             throw std::runtime_error("Data dir is invalid");
         }
 
         if (m_config_path.empty() ) {
             if (std::filesystem::exists(m_data_dir / "config.json")) {
-                m_config_path = (m_data_dir / "config.json").string();
+                m_config_path = m_data_dir / "config.json";
                 load_config();
             }
         }
+
+        // step 2. init logger
+        init_logger();
     }
 
     void MApp::parse_args(int argc, char **argv) {
@@ -129,7 +132,7 @@ namespace mason {
         }
     }
 
-    bool MApp::is_data_dir_valid() {
+    bool MApp::is_data_directory_valid() {
         if (!std::filesystem::exists(m_data_dir)) {
             if (!create_dir(m_data_dir)) {
                 return false;
@@ -151,27 +154,20 @@ namespace mason {
             return false;
         }
 
-        std::vector<std::string> subdirs = {
-            "log",
-            "tmp",
-            "data",
-            "user",
+        std::vector<std::filesystem::path> subdirs = {
+                m_log_dir = m_data_dir / "log",
+                m_tmp_dir = m_data_dir / "tmp",
+                m_sub_data_dir = m_data_dir / "data",
+                m_user_dir = m_data_dir / "user",
         };
 
-        for (const std::string &subdir : subdirs) {
-            std::filesystem::path path = m_data_dir / subdir;
-            if (!std::filesystem::exists(path)) {
-                if (!create_dir(path)) {
+        for (const std::filesystem::path &subdir : subdirs) {
+            if (!std::filesystem::exists(subdir)) {
+                if (!create_dir(subdir)) {
                     return false;
                 }
             }
         }
-
-        m_log_dir = m_data_dir / "log";
-        m_tmp_dir = m_data_dir / "tmp";
-        m_sub_data_dir = m_data_dir / "data";
-        m_user_dir = m_data_dir / "user";
-
         return true;
     }
 
@@ -180,6 +176,35 @@ namespace mason {
             m_data_dir = m_config["app"]["data_dir"].get<std::string>();
         } else {
             m_data_dir = get_platform_data_dir();
+        }
+    }
+
+    void MApp::init_logger() {
+        MLog::initialize((m_log_dir / "log.txt").string());
+        if (m_config.contains("app") && m_config["app"].contains("module_log_levels")) {
+            for (const auto &module_level : m_config["app"]["module_log_levels"]) {
+                MLog::Level log_level;
+                std::string module = module_level["module"].get<std::string>();
+                std::string level = module_level["level"].get<std::string>();
+                if (level == "trace") {
+                    log_level = MLog::Level::Trace;
+                } else if (level == "debug") {
+                    log_level = MLog::Level::Debug;
+                } else if (level == "info") {
+                    log_level = MLog::Level::Info;
+                } else if (level == "warning") {
+                    log_level = MLog::Level::Warning;
+                } else if (level == "error") {
+                    log_level = MLog::Level::Error;
+                } else if (level == "fatal") {
+                    log_level = MLog::Level::Fatal;
+                } else {
+                    throw  std::runtime_error("Invalid log level: " + level);
+                }
+                MLog::set_log_level(log_level, module);
+            }
+        } else {
+            MWarning("No module log levels in config file, use default log level: info");
         }
     }
 }

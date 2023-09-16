@@ -6,20 +6,24 @@ set SCRIPT_DIR=%~dp0
 cd /d "%SCRIPT_DIR%/.."
 
 :: clone vcpkg
-echo Cloning vcpkg...
-git clone https://github.com/microsoft/vcpkg.git
-if errorlevel 1 (
-    echo Failed to clone vcpkg.
-    exit /b 1
-)
+if exist vcpkg (
+    echo vcpkg already exists. Skipping clone and bootstrap.
+) else (
+    echo Cloning vcpkg...
+    git clone https://github.com/microsoft/vcpkg.git
+    if errorlevel 1 (
+        echo Failed to clone vcpkg.
+        exit /b 1
+    )
 
-:: bootstrap vcpkg
-echo Bootstrapping vcpkg...
-cd vcpkg
-call bootstrap-vcpkg.bat
-if errorlevel 1 (
-    echo Failed to bootstrap vcpkg.
-    exit /b 1
+    :: bootstrap vcpkg
+    echo Bootstrapping vcpkg...
+    cd vcpkg
+    call bootstrap-vcpkg.bat
+    if errorlevel 1 (
+        echo Failed to bootstrap vcpkg.
+        exit /b 1
+    )
 )
 
 :: install dependencies
@@ -30,6 +34,14 @@ echo Installing gtest...
 call vcpkg install gtest:x64-windows
 if errorlevel 1 (
     echo Failed to install gtest.
+    exit /b 1
+)
+
+:: install spdlog
+echo Installing spdlog...
+call vcpkg install spdlog:x64-windows
+if errorlevel 1 (
+    echo Failed to install spdlog.
     exit /b 1
 )
 
