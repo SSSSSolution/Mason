@@ -78,3 +78,26 @@ configuration files.
 3. 线程安全: instance 方法使用了一个静态局部变量来实现单例模式，这在C++11之后是线程安全的。但在多线程程序中使用其他成员变量和函数时，需要注意同步。
 4. 单例对象在程序结束时不会被删除。这不是一个真正的问题，因为操作系统会在程序退出时回收内存。但对于某些需要在析构函数中执行特定操作的情况，可能需要考虑如何手动删除该单例或使用智能指针。
 5. 考虑将平台相关的代码，如 get_platform_data_dir，移到一个独立的平台抽象层或工具类中，这样可以更容易地添加其他平台的支持。
+
+## Step 2: init logger
+  
+  
+  
+# Core Engine
+## initialization
+
+### Flowchart
+  ```mermaid
+  ---
+  title: Core Engine initialization
+  ---
+  flowchart TD
+    Start([Start]) --> A{Is Core Engine initialized?}
+    A --> |Yes| B([Return])
+    A --> |No| C[set properties by config]
+    C --> D{create and init Logic Core}
+    D --> |No| E[throw exception]
+    D --> |Yes| F{create and init Render Core}
+    F --> |No| E[throw exception]
+    F --> |Yes| B
+  ```

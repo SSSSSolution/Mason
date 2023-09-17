@@ -7,5 +7,12 @@
         "level": "trace"
       }
     ]
-  }
+  },
+  "core_engine": [
+    {
+      "name": "default",
+      "logic_engine": "default",
+      "render_engine": "default"
+    }
+  ]
 }

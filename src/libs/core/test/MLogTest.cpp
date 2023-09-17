@@ -26,7 +26,20 @@ protected:
 };
 
 TEST_F(MLogTest, TestInitilization) {
-    MInfo("test");
+    MTrace("test trace log");
+    MDebug("test debug log");
+    MInfo("test info log");
+    MWarning("test warning log");
+    MFatal("test fatal log");
+    MError("test error log");
+
+    MMTrace("test", "trace log");
+    MMDebug("test", "debug log");
+    MMInfo("test", "info log");
+    MMWarning("test", "warning log");
+    MMFatal("test", "fatal log");
+    MMError("test", "error log");
+
     EXPECT_TRUE(std::filesystem::exists(expected_log_path));
 }
 

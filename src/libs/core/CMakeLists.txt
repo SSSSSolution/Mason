@@ -8,6 +8,15 @@ add_library(${PROJECT_NAME} SHARED
     src/MApp.cpp
 	src/MLog.cpp
 	src/MCoreEngine.cpp
+	include/core/IRenderEngine.h
+	include/core/ILogicEngine.h
+	src/ILogicEngine.cpp
+	src/LogicEngine.h
+	src/LogicEngine.cpp
+	src/IRenderEngine.cpp
+	src/RenderEngine.h
+	src/RenderEngine.cpp
+	src/MGame.cpp
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE MASON_CORE_DLL)
