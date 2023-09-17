@@ -37,7 +37,7 @@ void MLog::log(mason::MLog::Level level,
         // todo: add to queue and log after initialization
         return;
     }
-    
+
     auto found_level = s_log_levels.find(module);
 
     if (found_level != s_log_levels.end()) {

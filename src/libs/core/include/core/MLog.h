@@ -38,6 +38,7 @@ public:
 private:
     static void initialize(const std::string &file_path);
     static void set_log_level(Level level, const std::string &module = "");
+    // todo: add set_log_flush_level() to flush logs at a certain level
 
 private:
     static std::string s_log_path;
