@@ -8,6 +8,7 @@ cd /d "%SCRIPT_DIR%/.."
 :: clone vcpkg
 if exist vcpkg (
     echo vcpkg already exists. Skipping clone and bootstrap.
+    cd vcpkg
 ) else (
     echo Cloning vcpkg...
     git clone https://github.com/microsoft/vcpkg.git
@@ -42,6 +43,14 @@ echo Installing spdlog...
 call vcpkg install spdlog:x64-windows
 if errorlevel 1 (
     echo Failed to install spdlog.
+    exit /b 1
+)
+
+:: install bullet3
+echo Installing bullet3
+call vcpkg install bullet3:x64-windows
+if errorlevel 1 (
+    echo Failed to install bullet3.
     exit /b 1
 )
 

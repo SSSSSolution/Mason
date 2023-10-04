@@ -1,18 +1,23 @@
-#ifndef MASON_RENDER_ENGINE_H
-#define MASON_RENDER_ENGINE_H
-
-#include "core/IRenderEngine.h"
+#ifndef MASON_CORE_RENDER_ENGINE_H
+#define MASON_CORE_RENDER_ENGINE_H
 
 namespace mason {
 
-class RenderEngine : public IRenderEngine {
-public:
-    virtual void initialize() override;
-    virtual void deinitialize() override;
+class MGame;
 
-    virtual void start() override;
-    virtual void pause() override;
-    virtual void stop() override;
+class RenderEngine {
+public:
+    RenderEngine(MGame *game): m_game(game) {}
+
+    void initialize();
+    void deinitialize();
+
+    void start();
+    void pause();
+    void stop();
+
+private:
+    MGame *m_game;
 };
 
 }
